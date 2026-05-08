@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盯事儿 · 进展文档</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; color: #1a1a1a; line-height: 1.7; background: #fafafa; }
+
+        /* Navigation */
+        .nav { position: fixed; top: 0; left: 0; width: 220px; height: 100vh; background: #fff; border-right: 1px solid #eee; padding: 32px 16px; overflow-y: auto; z-index: 100; }
+        .nav a { display: block; padding: 8px 12px; margin: 4px 0; color: #666; text-decoration: none; font-size: 13px; border-radius: 6px; transition: all 0.2s; }
+        .nav a:hover, .nav a.active { background: #f0f7ff; color: #1a73e8; }
+        .nav .nav-title { font-weight: 700; font-size: 14px; color: #1a1a1a; margin-bottom: 16px; padding: 0 12px; }
+
+        /* Main content */
+        .main { margin-left: 220px; max-width: 900px; padding: 48px 64px; }
+
+        /* Hero / Summary */
+        .hero { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: #fff; padding: 48px; border-radius: 16px; margin-bottom: 48px; }
+        .hero h1 { font-size: 28px; margin-bottom: 24px; font-weight: 700; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .hero-item { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 16px 20px; }
+        .hero-item .q { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 6px; font-weight: 600; }
+        .hero-item .a { font-size: 14px; color: #fff; }
+        .hero-item.full { grid-column: 1 / -1; }
+
+        /* Sections */
+        .section { margin-bottom: 64px; }
+        .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 2px solid #1a1a1a; }
+        .section-num { font-size: 48px; font-weight: 800; color: #e0e0e0; line-height: 1; }
+        .section-title { font-size: 22px; font-weight: 700; }
+        .section-subtitle { font-size: 14px; color: #666; margin-top: 4px; }
+
+        /* Subsections */
+        h3 { font-size: 17px; font-weight: 700; margin: 32px 0 16px; }
+        p { margin-bottom: 16px; font-size: 15px; }
+
+        /* Quotes */
+        .quote-block { background: #f8f9fa; border-left: 3px solid #4a90d9; padding: 16px 20px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+        .quote-block p { margin: 8px 0; font-size: 14px; color: #444; font-style: italic; }
+        .quote-block .source { font-style: normal; color: #888; font-size: 12px; }
+
+        /* Callout */
+        .callout { padding: 20px 24px; border-radius: 10px; margin: 24px 0; font-size: 14px; }
+        .callout.insight { background: #e8f4fd; border: 1px solid #b8ddf0; }
+        .callout.conclusion { background: #e8f8e8; border: 1px solid #b8e0b8; }
+        .callout.warning { background: #fff8e8; border: 1px solid #f0e0b8; }
+        .callout strong { display: block; margin-bottom: 8px; }
+
+        /* Iceberg */
+        .iceberg { position: relative; margin: 32px 0; }
+        .iceberg-layer { padding: 20px 24px; margin: 0; border-radius: 0; position: relative; }
+        .iceberg-layer:first-child { border-radius: 12px 12px 0 0; }
+        .iceberg-layer:last-child { border-radius: 0 0 12px 12px; }
+        .iceberg-layer.surface { background: #e3f2fd; border-bottom: 2px dashed #90caf9; }
+        .iceberg-layer.below { background: #e8eaf6; border-bottom: 2px dashed #9fa8da; }
+        .iceberg-layer.deep { background: #ede7f6; }
+        .iceberg-layer .layer-label { font-weight: 700; font-size: 13px; color: #555; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .iceberg-layer .layer-label .tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; color: #fff; }
+        .iceberg-layer.surface .tag { background: #42a5f5; }
+        .iceberg-layer.below .tag { background: #5c6bc0; }
+        .iceberg-layer.deep .tag { background: #7e57c2; }
+        .iceberg-layer .layer-quotes { font-size: 13px; color: #555; margin-top: 8px; }
+        .waterline { text-align: center; font-size: 11px; color: #90a4ae; padding: 4px; background: rgba(144,164,174,0.1); letter-spacing: 4px; }
+
+        /* Cards grid */
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 24px 0; }
+        .card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; transition: all 0.2s; cursor: default; }
+        .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .card .card-title { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+        .card .card-desc { font-size: 13px; color: #666; margin-bottom: 12px; }
+        .card .card-quote { font-size: 12px; color: #888; font-style: italic; border-top: 1px solid #f0f0f0; padding-top: 10px; margin-top: 10px; }
+
+        /* Comparison */
+        .compare { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 0; margin: 32px 0; border-radius: 12px; overflow: hidden; border: 1px solid #eee; }
+        .compare-col { padding: 24px; }
+        .compare-col:nth-child(1) { background: #f9f9f9; }
+        .compare-col:nth-child(2) { background: #f5f5f5; }
+        .compare-col:nth-child(3) { background: #e8f5e9; }
+        .compare-col h4 { font-size: 14px; margin-bottom: 4px; }
+        .compare-col .metaphor { font-size: 12px; color: #888; margin-bottom: 16px; }
+        .compare-col .compare-item { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 13px; }
+        .compare-col .compare-item .label { font-size: 11px; color: #999; }
+        .compare-col:nth-child(3) .compare-item { font-weight: 600; color: #2e7d32; }
+
+        /* Timeline */
+        .timeline { margin: 32px 0; }
+        .timeline-row { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 0; margin-bottom: 2px; }
+        .timeline-label { font-size: 11px; color: #999; padding: 12px 8px; text-align: right; }
+        .timeline-without { background: #fafafa; padding: 12px 16px; font-size: 13px; border-right: 1px solid #eee; }
+        .timeline-with { background: #f1f8e9; padding: 12px 16px; font-size: 13px; }
+        .timeline-header { font-weight: 700; font-size: 12px; color: #666; }
+        .timeline-row.result .timeline-without { color: #d32f2f; font-weight: 600; }
+        .timeline-row.result .timeline-with { color: #2e7d32; font-weight: 600; }
+
+        /* Divider */
+        .divider { text-align: center; padding: 48px 0; margin: 48px 0; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 12px; }
+        .divider h2 { font-size: 22px; color: #2e7d32; margin-bottom: 8px; }
+        .divider p { font-size: 14px; color: #555; }
+
+        /* Table */
+        .data-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+        .data-table th { background: #f5f5f5; padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e0e0e0; }
+        .data-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+        .data-table tr:hover td { background: #fafafa; }
+        .tag-need { background: #fff3e0; color: #e65100; font-size: 11px; padding: 2px 6px; border-radius: 3px; }
+        .tag-have { background: #e8f5e9; color: #2e7d32; font-size: 11px; padding: 2px 6px; border-radius: 3px; }
+
+        /* Status board */
+        .status-board { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 24px 0; }
+        .status-col { background: #fff; border-radius: 10px; padding: 16px; border: 1px solid #eee; }
+        .status-col h4 { font-size: 12px; color: #888; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .status-col.col-done h4 { color: #2e7d32; }
+        .status-col.col-doing h4 { color: #f57c00; }
+        .status-col.col-todo h4 { color: #d32f2f; }
+        .status-item { font-size: 12px; padding: 8px 10px; background: #f9f9f9; border-radius: 6px; margin-bottom: 6px; }
+
+        /* Dinkus/section break */
+        .dinkus { text-align: center; margin: 48px 0; color: #ccc; font-size: 24px; letter-spacing: 16px; }
+
+        @media (max-width: 1024px) {
+            .nav { display: none; }
+            .main { margin-left: 0; padding: 24px; }
+            .hero-grid { grid-template-columns: 1fr; }
+            .compare { grid-template-columns: 1fr; }
+            .cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+    <div class="nav-title">盯事儿 · 进展</div>
+    <a href="#summary">30秒摘要</a>
+    <a href="#s1">一、需求</a>
+    <a href="#s2">二、立意</a>
+    <a href="#s3">三、时机</a>
+    <a href="#divider">→ 值得做</a>
+    <a href="#s4">四、负一屏</a>
+    <a href="#s5">五、方案</a>
+</nav>
+
+<!-- Main -->
+<div class="main">
+
+<!-- Hero -->
+<section class="hero" id="summary">
+    <h1>盯事儿 · 中期进展</h1>
+    <div class="hero-grid">
+        <div class="hero-item">
+            <div class="q">一、需求真实吗？</div>
+            <div class="a">真实。「帮我管事」的需求普遍存在，遗漏有三层，现有工具只够得着中间一层。</div>
+        </div>
+        <div class="hero-item">
+            <div class="q">二、值得做吗？</div>
+            <div class="a">值得。AI时代人更焦虑了，正确回应是给人从容。产品定义为「惦记系统」。</div>
+        </div>
+        <div class="hero-item">
+            <div class="q">三、时机对吗？</div>
+            <div class="a">对。N=293 用户对 AIOS 的第一想象就是「主动管家」——他们描述的就是盯事儿。</div>
+        </div>
+        <div class="hero-item">
+            <div class="q">四、负一屏适合承载吗？</div>
+            <div class="a">有空间。黄金地段但内容区价值未发挥，有改造条件。锁屏侧滑是补充入口。</div>
+        </div>
+        <div class="hero-item full">
+            <div class="q">五、方案就绪了吗？</div>
+            <div class="a">能力门槛和场景优先级清楚了，V3 demo 设计中，4 个关键决策待验证。</div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 1 -->
+<section class="section" id="s1">
+    <div class="section-header">
+        <div class="section-num">01</div>
+        <div>
+            <div class="section-title">从需求看</div>
+            <div class="section-subtitle">"记事/管事"的需求真实、普遍，且远未被满足</div>
+        </div>
+    </div>
+
+    <h3>需求真实存在：人天然需要外力帮忙管事</h3>
+
+    <div class="quote-block">
+        <p>「答应女儿贴车贴拖了一个多月——每次想起来要么下雨、要么车脏，几次之后就忘了。」<span class="source">——李堃</span></p>
+        <p>「爷爷打电话让我回家帮他清理手机，回到家记得是关于手机的事，但想不起具体做什么。」<span class="source">——徐一超</span></p>
+        <p>「甲状腺复查每三个月一次，上次1月，一直惦记着没去做。」<span class="source">——岳乐</span></p>
+    </div>
+
+    <p><strong>认知科学解释</strong>：工作记忆容量有限（Miller, 7±2）、蔡格尼克效应反面（决定「之后再说」= 提前遗忘）、注意力残留（切换中的小事最容易丢）、开放回路（大脑需要外部系统）。</p>
+
+    <div class="callout warning">
+        <strong>有代价：遗漏不是「无所谓的小事」，它带来真实的情绪损失</strong>
+        遗漏带来的不只是事情没做——是情绪上的懊恼、关系上的失信、实际上的损失。30人访谈中，用户能持续讲出大量遗漏事项（人均 5-8 条），伴随的情绪是<strong>懊恼、遗憾、对自己的失望</strong>。这不是「忘了就算了」，是「想起来就难受」。
+    </div>
+
+    <p><strong>很普遍——不是少数人的问题</strong></p>
+    <ul style="font-size: 14px; color: #444;">
+        <li>概念测试有用度均值 <strong>8.7/10</strong>（N=28），属必备型需求</li>
+        <li>30人访谈，人均说出 <strong>6 条</strong>「希望系统帮盯但现在没工具管」的具体事项（共174条）——每个人脑子里都挂着一堆事没人帮忙接</li>
+    </ul>
+
+    <h3>需求比看到的更深：冰山三层</h3>
+
+    <div class="iceberg">
+        <div class="iceberg-layer surface">
+            <div class="layer-label"><span class="tag">水面上</span> 意识到了但管不过来</div>
+            <div>现有工具在这层努力——但效果有限</div>
+            <div class="layer-quotes">「提醒、待办、闹钟、飞书日历都比较分散，没法综合调配」——彭占丽</div>
+        </div>
+        <div class="waterline">— — — 水 面 — — —</div>
+        <div class="iceberg-layer below">
+            <div class="layer-label"><span class="tag">水面下</span> 根本没意识到要管</div>
+            <div>现有工具完全触达不到这一层</div>
+            <div class="layer-quotes">「聊天中穿插提到顺道买个什么东西，当时根本没觉得需要记」——刘伟鉴</div>
+        </div>
+        <div class="iceberg-layer deep">
+            <div class="layer-label"><span class="tag">海底</span> 意识到了但不想面对</div>
+            <div>即使提醒了也没用——是情绪问题不是工具问题</div>
+            <div class="layer-quotes">「牙科复查3月就到期了，一是工作太忙，二是要重新拾起这个事需要一点信心」——孙印婷</div>
+        </div>
+    </div>
+
+    <div class="callout insight">
+        <strong>关键洞察</strong>
+        现有工具假设用户已经「意识到」且「愿意面对」，只帮你管中间那一层。但真正的需求空间在水面下——那些连门都看不见的、以及那些看见了不想进去的。
+    </div>
+
+    <h3>为什么现有工具都有点「鸡肋」</h3>
+
+    <table class="data-table">
+        <thead><tr><th>维度</th><th>一句话</th><th>代表原声</th></tr></thead>
+        <tbody>
+            <tr><td><strong>① 被动</strong></td><td>需要我先想到、先告诉它</td><td>「鸡肋，还是需要我主动去告诉它」（裴煜）</td></tr>
+            <tr><td><strong>② 输入麻烦</strong></td><td>交互重、散落多处、录入成本高</td><td>「备忘录全部乱写，今天写这明天写那」（yueyue）</td></tr>
+            <tr><td><strong>③ 提醒不靠谱</strong></td><td>只响一次、响了没做就没了</td><td>「飞书提醒一遍忽略了就不会再提醒」（彭占丽）</td></tr>
+            <tr><td><strong>④ 不够智能</strong></td><td>没上下文、不能关联判断</td><td>「让它记了到时候也不提醒，再问记的什么说不知道」（李生红）</td></tr>
+            <tr><td><strong>⑤ 只记不做</strong></td><td>只提醒不执行 = 跟记事本没区别</td><td>「只提醒不执行等于记事本，没有本质区别」（裴煜）</td></tr>
+        </tbody>
+    </table>
+
+    <div class="callout conclusion">
+        <strong>第一部分结论</strong>
+        「帮我管事」的需求真实存在、比现有工具看到的更深、且当前供给全线不足。这里有一个大的、结构性的、未被满足的需求空间。
+    </div>
+</section>
+
+<div class="dinkus">···</div>
+
+<!-- Section 2 -->
+<section class="section" id="s2">
+    <div class="section-header">
+        <div class="section-num">02</div>
+        <div>
+            <div class="section-title">从立意看</div>
+            <div class="section-subtitle">AI 应该让人更从容，而不是更焦虑</div>
+        </div>
+    </div>
+
+    <p>第一部分说的是功能性的缺口。但这件事值得做，不只因为工具不好用——而是因为 AI 时代人变得更焦虑了：信息膨胀、欲望膨胀、事情永远做不完。</p>
+    <p><strong>我们认为，AI 对人的正确回应，不是帮你做更多，是让你更平静。</strong></p>
+
+    <h3>五条人文主张</h3>
+
+    <div class="cards">
+        <div class="card">
+            <div class="card-title">做减法，做取舍</div>
+            <div class="card-desc">帮人抚平焦虑、回归平静。效率是基础，但更高层是帮人「舍」——梳理真正的优先级，而非无限扩张欲望</div>
+            <div class="card-quote">「舍的那个部分，很有人文感，很像回归到一种匠心古法、慢慢炮制的感觉」——wanqing</div>
+        </div>
+        <div class="card">
+            <div class="card-title">托管焦虑</div>
+            <div class="card-desc">事情减不掉，但认知负担可以转移。「我帮你记着，你现在不用操心」——焦虑的承载者从人转移到系统</div>
+            <div class="card-quote">「帮我规划说这件事应该在未来某个阶段去想，暂时先不想，我帮你记着」——yueyue</div>
+        </div>
+        <div class="card">
+            <div class="card-title">尊重犹豫</div>
+            <div class="card-desc">提了很多次没做，可能不是忘了，是有不想做的原因。理解你为什么没做，而不是发现没做就催</div>
+            <div class="card-quote">「提了很多次没做就提醒你，是死的规则。但理解为什么没做，那就是很有人文感了」——梦馨</div>
+        </div>
+        <div class="card">
+            <div class="card-title">非标准化</div>
+            <div class="card-desc">如果 AI 把每个人的生活都管理成同一个最优解，人就失去了自己的异常值。产品应服务于你独特的生活方式</div>
+            <div class="card-quote">「如果所有人都沿着回归线走，不提供偏差，社会就死寂了」——韦青</div>
+        </div>
+        <div class="card">
+            <div class="card-title">带人走向真实生活</div>
+            <div class="card-desc">AI 的终点不是让人更依赖屏幕。提醒你带妈妈体检，底层是让你和妈妈产生一次真实的连接</div>
+            <div class="card-quote">「真正的人文方向，应该是把人带回真实世界，而不是用拟人化把人留在虚拟世界」——wanqing</div>
+        </div>
+    </div>
+
+    <h3>产品核心概念：惦记系统</h3>
+    <p style="font-size: 17px; font-weight: 600; margin: 24px 0;">这不是待办工具，是一个惦记系统——它替你兜着生活里容易漏掉的事，让你不辜负在乎的人，也不辜负自己。</p>
+
+    <!-- Three-column comparison -->
+    <div class="compare">
+        <div class="compare-col">
+            <h4>📋 备忘录</h4>
+            <div class="metaphor">冰箱贴便签</div>
+            <div class="compare-item"><span class="label">起点</span><br>你写，它存</div>
+            <div class="compare-item"><span class="label">过程</span><br>静静躺着</div>
+            <div class="compare-item"><span class="label">态度</span><br>无</div>
+            <div class="compare-item"><span class="label">终点</span><br>你打勾</div>
+        </div>
+        <div class="compare-col">
+            <h4>🤖 智能助手</h4>
+            <div class="metaphor">秘书</div>
+            <div class="compare-item"><span class="label">起点</span><br>你说，它做</div>
+            <div class="compare-item"><span class="label">过程</span><br>到时间就响</div>
+            <div class="compare-item"><span class="label">态度</span><br>催你做</div>
+            <div class="compare-item"><span class="label">终点</span><br>任务完成</div>
+        </div>
+        <div class="compare-col">
+            <h4>💛 惦记系统</h4>
+            <div class="metaphor">一直替你记着事的家人</div>
+            <div class="compare-item"><span class="label">起点</span><br>它自己发现</div>
+            <div class="compare-item"><span class="label">过程</span><br>理解你的状态，等合适的时机</div>
+            <div class="compare-item"><span class="label">态度</span><br>替你记着，等你准备好</div>
+            <div class="compare-item"><span class="label">终点</span><br>你回到真实生活——去见那个人</div>
+        </div>
+    </div>
+
+    <h3>最能体现这个概念的一个画面</h3>
+    <div class="timeline">
+        <div class="timeline-row">
+            <div class="timeline-label"></div>
+            <div class="timeline-without timeline-header">没有惦记</div>
+            <div class="timeline-with timeline-header">有惦记</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-label">答应时</div>
+            <div class="timeline-without">答应妈妈带她去体检</div>
+            <div class="timeline-with">答应妈妈带她去体检</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-label">第1周</div>
+            <div class="timeline-without">忙，忘了</div>
+            <div class="timeline-with">系统记住了</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-label">第2-3周</div>
+            <div class="timeline-without">完全想不起来</div>
+            <div class="timeline-with">理解你在忙，不催</div>
+        </div>
+        <div class="timeline-row">
+            <div class="timeline-label">周末有空</div>
+            <div class="timeline-without">—</div>
+            <div class="timeline-with">「妈妈的体检还没去呢」</div>
+        </div>
+        <div class="timeline-row result">
+            <div class="timeline-label">结果</div>
+            <div class="timeline-without">三个月后想起来，愧疚</div>
+            <div class="timeline-with">你去了。不辜负。</div>
+        </div>
+    </div>
+
+    <p style="text-align: center; color: #666; font-size: 14px; margin-top: 8px;">这不是管理。这是惦记。</p>
+
+    <h3>核心场景：四个「不辜负」</h3>
+    <div class="cards" style="grid-template-columns: 1fr 1fr;">
+        <div class="card" style="border-left: 4px solid #e91e63;">
+            <div class="card-title">不辜负家人的期待</div>
+            <div class="card-desc">妈妈体检 / 女儿车贴 / 爷爷手机 / 给妈妈买东西</div>
+            <div class="card-quote">如果漏了：愧疚、失信于最亲的人</div>
+        </div>
+        <div class="card" style="border-left: 4px solid #ff9800;">
+            <div class="card-title">不错过时间窗口</div>
+            <div class="card-desc">抢票 / 证件到期 / 缴费 / 会员日</div>
+            <div class="card-quote">如果漏了：错过不可逆，事后补救成本极高</div>
+        </div>
+        <div class="card" style="border-left: 4px solid #2196f3;">
+            <div class="card-title">不漏掉答应别人的事</div>
+            <div class="card-desc">朋友约定 / 工作承诺 / 帮人带东西</div>
+            <div class="card-quote">如果漏了：别人觉得你不靠谱</div>
+        </div>
+        <div class="card" style="border-left: 4px solid #4caf50;">
+            <div class="card-title">不放弃自己想做的事</div>
+            <div class="card-desc">健身 / 学习 / 旅行计划 / 长期目标</div>
+            <div class="card-quote">如果漏了：对自己失望，觉得又没坚持住</div>
+        </div>
+    </div>
+    <p style="text-align: center; color: #555; font-size: 14px; margin-top: 16px;">四个「不辜负」，对应四种关系：<strong>家人、时间、他人、自己。</strong></p>
+
+    <h3>与 OPPO「一键闪记」的核心区别</h3>
+    <p>OPPO 按「输入方式」定义场景（按一下记视频/记取餐码/语音记灵感），核心价值是<strong>记的动作变简单了</strong>。<br>盯事儿按「不辜负了什么」定义场景，核心价值是<strong>你根本不用记，也不会辜负</strong>。</p>
+
+    <table class="data-table">
+        <thead><tr><th></th><th>OPPO 一键闪记</th><th><strong>盯事儿</strong></th></tr></thead>
+        <tbody>
+            <tr><td><strong>核心逻辑</strong></td><td>「记」——用户按一下，系统帮你存好</td><td>「惦记」——用户不用按，系统自己发现</td></tr>
+            <tr><td><strong>解决的问题</strong></td><td>输入门槛（记的过程麻烦）</td><td>意识门槛（你根本没想到要记）</td></tr>
+            <tr><td><strong>冰山位置</strong></td><td>水面上（你知道要记，只是操作简化）</td><td>水面下+海底（没意识到 + 在逃避的）</td></tr>
+            <tr><td><strong>场景叙事</strong></td><td>功能叙事：我帮你记住了什么</td><td>关系叙事：你因此没有辜负谁</td></tr>
+            <tr><td><strong>用户动作</strong></td><td>主动按一下</td><td>不需要任何动作</td></tr>
+        </tbody>
+    </table>
+
+</section>
+
+<div class="dinkus">···</div>
+
+<!-- Section 3 -->
+<section class="section" id="s3">
+    <div class="section-header">
+        <div class="section-num">03</div>
+        <div>
+            <div class="section-title">从时机看</div>
+            <div class="section-subtitle">这恰好是用户对 AIOS 的第一想象</div>
+        </div>
+    </div>
+
+    <p>N=293 用户对 AIOS 的自由联想，高频词和具象场景与盯事儿高度重合。用户不需要被教育——他们已经在想象这个产品了。</p>
+
+    <h3>「主动管家」是用户的第一意象</h3>
+    <div class="cards" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: #1a73e8;">93</div>
+            <div style="font-size: 12px; color: #888;">次提到「自动」</div>
+        </div>
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: #1a73e8;">85</div>
+            <div style="font-size: 12px; color: #888;">次提到「主动」</div>
+        </div>
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: #1a73e8;">53</div>
+            <div style="font-size: 12px; color: #888;">次提到「一句话」</div>
+        </div>
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 32px; font-weight: 800; color: #1a73e8;">51</div>
+            <div style="font-size: 12px; color: #888;">次提到「贾维斯」</div>
+        </div>
+    </div>
+    <p>这些词指向的不是「更强的搜索」「更快的生成」，而是「帮我管事的人」。</p>
+
+    <h3>用户描述 AIOS 时，就是在描述盯事儿</h3>
+    <p>Q6+Q7 中，<strong>25%（73/293）</strong>的用户本质上在说「帮我管事/记事/盯事」。</p>
+    <div class="quote-block">
+        <p>「手动打开钉钉看会议待办，抄到备忘录、标优先级，看微信群聊、看需要做的事……现在只需要让AI来操作，我就不用动」</p>
+        <p>「希望它及时关注我之前没有完成的内容，帮我跟进工作进度」</p>
+        <p>「不只是前一天提醒的，前几周记录过但没完成的，它也会一直记得住」</p>
+    </div>
+    <p style="font-size: 13px; color: #888;">注：AIOS 数据证明的是方向对（用户想要主动式管家），具体场景验证来自盯事儿 30 人访谈。</p>
+</section>
+
+<!-- Divider -->
+<div class="divider" id="divider">
+    <h2>至此：值得做。</h2>
+    <p>需求真实 × 立意成立 × 时机正确 → 接下来回答：放在哪里？怎么做？</p>
+</div>
+
+<!-- Section 4 -->
+<section class="section" id="s4">
+    <div class="section-header">
+        <div class="section-num">04</div>
+        <div>
+            <div class="section-title">负一屏是否适合被改造</div>
+            <div class="section-subtitle">当前价值几何？能承载盯事儿吗？</div>
+        </div>
+    </div>
+
+    <h3>4.1 负一屏当前的价值几何</h3>
+    <p>负一屏占据「主屏左滑」的黄金地段。问题不是有没有问题，而是：<strong>这块地段当前产出的价值，配不配得上它的位置？</strong></p>
+
+    <div class="status-board">
+        <div class="status-col col-done">
+            <h4>已有（定性）</h4>
+            <div class="status-item">42-53% 用户选择负一屏承载</div>
+            <div class="status-item">用户评价：「没啥用，正好替换」</div>
+            <div class="status-item">底线：扫一扫/付款码不能动</div>
+        </div>
+        <div class="status-col col-doing">
+            <h4>进行中</h4>
+            <div class="status-item">负一屏高频用户访谈</div>
+        </div>
+        <div class="status-col col-todo">
+            <h4>待获取（定量）</h4>
+            <div class="status-item">负一屏 DAU / 活跃占比</div>
+            <div class="status-item">各组件点击率排序</div>
+            <div class="status-item">人均停留时长</div>
+            <div class="status-item">主动关闭/禁用率</div>
+            <div class="status-item">日均打开频次</div>
+        </div>
+    </div>
+
+    <div class="callout warning">
+        <strong>判断</strong>
+        负一屏是主屏左滑的黄金地段，但当前内容区的产出价值远低于位置本身的潜力——不是「有问题」，是「没发挥出应有的价值」。
+    </div>
+
+    <h3>4.2 它适合承载盯事儿吗？</h3>
+    <table class="data-table">
+        <thead><tr><th>产品需要</th><th>负一屏能满足吗</th><th>锁屏侧滑</th></tr></thead>
+        <tbody>
+            <tr><td>独立、有专属感</td><td>✅ 整屏空间</td><td>⚠️ 空间较小</td></tr>
+            <tr><td>高频可见</td><td>⚠️ 取决于习惯养成</td><td>✅ 每次亮屏可见</td></tr>
+            <tr><td>主动去看，不被打扰</td><td>✅ 用户主动划入</td><td>✅ 用户主动看</td></tr>
+            <tr><td>零历史包袱</td><td>⚠️ 扫一扫/付款码要保留</td><td>✅ 无</td></tr>
+        </tbody>
+    </table>
+    <p><strong>结论</strong>：负一屏内容区适合承载，锁屏侧滑做高频补充。两者内容一致。</p>
+</section>
+
+<div class="dinkus">···</div>
+
+<!-- Section 5 -->
+<section class="section" id="s5">
+    <div class="section-header">
+        <div class="section-num">05</div>
+        <div>
+            <div class="section-title">方案概览</div>
+            <div class="section-subtitle">能力门槛清楚了，V3 设计中</div>
+        </div>
+    </div>
+
+    <h3>能力门槛</h3>
+    <table class="data-table">
+        <thead><tr><th>层级</th><th>能力</th><th>必备率</th></tr></thead>
+        <tbody>
+            <tr><td><strong>绝对底线</strong></td><td>质量可靠 / 快速记录 / 智能提醒</td><td>>70%</td></tr>
+            <tr><td><strong>过半必备</strong></td><td>通知抓取 / 全貌总览</td><td>60%</td></tr>
+            <tr><td>塑造惊喜</td><td>聊天抓取 / 拆解步骤</td><td>30-36%</td></tr>
+            <tr><td>纯加分</td><td>自动执行 / 主动推荐</td><td><20%</td></tr>
+        </tbody>
+    </table>
+
+    <h3>场景优先级</h3>
+    <div class="cards" style="grid-template-columns: 1fr 1fr;">
+        <div class="card">
+            <div class="card-title">基础场景（必须做到）</div>
+            <div class="card-desc">缴费 · 证件到期 · 快递 · 抢票 · 纪念日 · 健康提醒</div>
+        </div>
+        <div class="card">
+            <div class="card-title">惊喜场景（拉开差异化）</div>
+            <div class="card-desc">电话/聊天抓取 · 办证全流程拆解 · 节点规划 · 进度追踪</div>
+        </div>
+    </div>
+
+    <h3>待验证的 4 个决策</h3>
+    <table class="data-table">
+        <thead><tr><th>决策</th><th>张力来源</th></tr></thead>
+        <tbody>
+            <tr><td>长期待办：常驻 vs 隐藏</td><td>拖延型需要视觉压力 vs 自驱型觉得只有压力</td></tr>
+            <tr><td>长期待办：卡片 vs 待办事项</td><td>形式影响情绪代价</td></tr>
+            <tr><td>点击后：跳转应用 vs 当前处理</td><td>影响「助手 vs 记事本」的定义</td></tr>
+            <tr><td>工作生活：Tab / 分区 / 不分</td><td>三种方案各有拥趸</td></tr>
+        </tbody>
+    </table>
+</section>
+
+</div>
+</body>
+</html>

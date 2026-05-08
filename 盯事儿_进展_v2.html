@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盯事儿 · 中期进展</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --surface-2: #1e1e1e;
+            --border: rgba(255,255,255,0.06);
+            --text: #e8e8e8;
+            --text-dim: #888;
+            --text-muted: #555;
+            --accent: #6366f1;
+            --accent-soft: rgba(99,102,241,0.12);
+            --green: #10b981;
+            --green-soft: rgba(16,185,129,0.12);
+            --amber: #f59e0b;
+            --amber-soft: rgba(245,158,11,0.12);
+            --rose: #f43f5e;
+            --rose-soft: rgba(244,63,94,0.12);
+            --blue: #3b82f6;
+            --blue-soft: rgba(59,130,246,0.12);
+            --radius: 12px;
+            --radius-lg: 20px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, "PingFang SC", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout */
+        .container { max-width: 860px; margin: 0 auto; padding: 80px 40px; }
+
+        /* Typography */
+        h1 { font-family: 'Noto Serif SC', serif; font-size: 42px; font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 16px; }
+        h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; color: var(--text-dim); margin-bottom: 48px; }
+        h3 { font-size: 22px; font-weight: 600; margin: 64px 0 24px; line-height: 1.4; }
+        h4 { font-size: 14px; font-weight: 600; color: var(--text-dim); margin-bottom: 12px; }
+        p { font-size: 15px; color: var(--text-dim); margin-bottom: 20px; line-height: 1.9; }
+        strong { color: var(--text); font-weight: 600; }
+
+        /* Hero */
+        .hero { padding: 120px 0 80px; border-bottom: 1px solid var(--border); margin-bottom: 80px; }
+        .hero-label { font-size: 12px; font-weight: 600; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 24px; }
+        .hero p { font-size: 17px; color: var(--text-dim); max-width: 600px; }
+
+        /* Summary cards */
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 48px; }
+        .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; transition: all 0.3s ease; }
+        .summary-card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-1px); }
+        .summary-card .num { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 1px; margin-bottom: 8px; }
+        .summary-card .answer { font-size: 14px; color: var(--text); line-height: 1.6; }
+        .summary-card.full { grid-column: 1 / -1; }
+
+        /* Section */
+        .section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+        .section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; }
+        .section-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+
+        /* Quote */
+        .quote { position: relative; padding: 24px 0 24px 24px; margin: 32px 0; border-left: 2px solid var(--surface-2); }
+        .quote p { font-size: 14px; color: var(--text-dim); font-style: italic; margin-bottom: 8px; line-height: 1.8; }
+        .quote .src { font-size: 12px; color: var(--text-muted); font-style: normal; }
+
+        /* Iceberg */
+        .iceberg { margin: 40px 0; border-radius: var(--radius-lg); overflow: hidden; }
+        .ice-layer { padding: 28px 32px; }
+        .ice-layer.l1 { background: rgba(59,130,246,0.06); }
+        .ice-layer.water { background: transparent; text-align: center; padding: 8px; font-size: 11px; letter-spacing: 6px; color: var(--text-muted); border-top: 1px dashed rgba(59,130,246,0.3); border-bottom: 1px dashed rgba(99,102,241,0.3); }
+        .ice-layer.l2 { background: rgba(99,102,241,0.06); }
+        .ice-layer.l3 { background: rgba(139,92,246,0.06); }
+        .ice-label { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+        .ice-layer.l1 .ice-label { color: var(--blue); }
+        .ice-layer.l2 .ice-label { color: var(--accent); }
+        .ice-layer.l3 .ice-label { color: #a78bfa; }
+        .ice-desc { font-size: 13px; color: var(--text-dim); }
+        .ice-quote { font-size: 12px; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+
+        /* Insight box */
+        .insight { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin: 32px 0; }
+        .insight.green { border-left: 3px solid var(--green); }
+        .insight.amber { border-left: 3px solid var(--amber); }
+        .insight.accent { border-left: 3px solid var(--accent); }
+        .insight strong { display: block; font-size: 13px; margin-bottom: 8px; }
+        .insight p { font-size: 14px; margin: 0; }
+
+        /* Cards */
+        .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 32px 0; }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; transition: all 0.3s ease; }
+        .card:hover { border-color: rgba(255,255,255,0.1); }
+        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 10px; color: var(--text); }
+        .card-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 14px; }
+        .card-footer { font-size: 12px; color: var(--text-muted); font-style: italic; padding-top: 14px; border-top: 1px solid var(--border); }
+        .card.rose { border-left: 3px solid var(--rose); }
+        .card.amber { border-left: 3px solid var(--amber); }
+        .card.blue { border-left: 3px solid var(--blue); }
+        .card.green { border-left: 3px solid var(--green); }
+
+        /* Compare 3-col */
+        .compare-3 { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 0; margin: 40px 0; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); }
+        .cmp-col { padding: 32px 24px; }
+        .cmp-col:nth-child(1) { background: var(--surface); }
+        .cmp-col:nth-child(2) { background: var(--surface); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+        .cmp-col:nth-child(3) { background: var(--green-soft); }
+        .cmp-col h5 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .cmp-col .meta { font-size: 11px; color: var(--text-muted); margin-bottom: 20px; }
+        .cmp-row { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-dim); }
+        .cmp-row .lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .cmp-col:nth-child(3) .cmp-row { color: var(--green); font-weight: 500; }
+
+        /* Timeline before/after */
+        .timeline-compare { margin: 40px 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+        .tc-header { display: grid; grid-template-columns: 80px 1fr 1fr; background: var(--surface-2); }
+        .tc-header div { padding: 12px 16px; font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+        .tc-row { display: grid; grid-template-columns: 80px 1fr 1fr; border-top: 1px solid var(--border); }
+        .tc-row div { padding: 14px 16px; font-size: 13px; }
+        .tc-row div:first-child { color: var(--text-muted); font-size: 11px; font-weight: 500; }
+        .tc-row div:nth-child(2) { color: var(--text-dim); border-right: 1px solid var(--border); }
+        .tc-row div:nth-child(3) { color: var(--text-dim); }
+        .tc-row.result div:nth-child(2) { color: var(--rose); font-weight: 600; }
+        .tc-row.result div:nth-child(3) { color: var(--green); font-weight: 600; }
+
+        /* Data numbers */
+        .data-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 32px 0; }
+        .data-num { text-align: center; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+        .data-num .val { font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+        .data-num .label { font-size: 11px; color: var(--text-muted); }
+
+        /* Table */
+        .tbl { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 13px; }
+        .tbl th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+        .tbl td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text-dim); }
+        .tbl tr:hover td { background: var(--surface); }
+        .tbl td:first-child { color: var(--text); font-weight: 500; }
+
+        /* Divider */
+        .divider { text-align: center; padding: 80px 0; margin: 0; border-bottom: 1px solid var(--border); }
+        .divider h3 { font-size: 28px; font-weight: 700; color: var(--green); margin: 0 0 12px; }
+        .divider p { font-size: 14px; color: var(--text-dim); }
+
+        /* Fade in */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .section { animation: fadeUp 0.6s ease both; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 40px 20px; }
+            h1 { font-size: 28px; }
+            .summary-grid, .cards, .data-row { grid-template-columns: 1fr; }
+            .compare-3 { grid-template-columns: 1fr; }
+            .tc-header, .tc-row { grid-template-columns: 60px 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-label">中期进展 · 2026.05</div>
+    <h1>盯事儿</h1>
+    <p>不是帮你做更多，是帮你忘更少。<br>一个惦记系统——它替你兜着生活里容易漏掉的事，让你不辜负在乎的人。</p>
+
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="num">01 · 需求</div>
+            <div class="answer">真实。遗漏有三层，现有工具只够得着中间一层。</div>
+        </div>
+        <div class="summary-card">
+            <div class="num">02 · 立意</div>
+            <div class="answer">AI 时代人更焦虑了，正确回应是给人从容。</div>
+        </div>
+        <div class="summary-card">
+            <div class="num">03 · 时机</div>
+            <div class="answer">N=293 对 AIOS 的第一想象就是「主动管家」。</div>
+        </div>
+        <div class="summary-card">
+            <div class="num">04 · 场域</div>
+            <div class="answer">负一屏黄金地段未发挥价值，有改造空间。</div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 1 -->
+<section class="section">
+    <div class="section-label">Part 01 · 从需求看</div>
+    <h3>「帮我管事」的需求真实、普遍，且远未被满足</h3>
+
+    <div class="quote">
+        <p>「答应女儿贴车贴拖了一个多月——每次想起来要么下雨、要么车脏，几次之后就忘了。」</p>
+        <p class="src">——李堃</p>
+    </div>
+    <div class="quote">
+        <p>「爷爷打电话让我回家帮他清理手机，回到家记得是关于手机的事，但想不起具体做什么。」</p>
+        <p class="src">——徐一超</p>
+    </div>
+
+    <p>生活是多线并行的，人会遗漏掉其中一些事——这是<strong>认知局限</strong>，不是个人问题。工作记忆容量有限（Miller, 7±2），注意力在任务切换中残留，大脑擅长产生想法但不擅长存储和提醒。</p>
+
+    <div class="insight amber">
+        <strong>有代价</strong>
+        <p>遗漏带来的不只是事情没做——是情绪上的懊恼、关系上的失信、实际上的损失。30人访谈中，用户人均说出 5-8 条遗漏事项，伴随懊恼、遗憾、对自己的失望。这不是「忘了就算了」，是「想起来就难受」。</p>
+    </div>
+
+    <p><strong>规模：</strong>概念测试有用度均值 8.7/10（N=28），属必备型需求。30人访谈人均说出 6 条「希望系统帮盯但现在没工具管」的事项，共 174 条。</p>
+
+    <h3>冰山三层：我们只看到了水面上那一层</h3>
+
+    <div class="iceberg">
+        <div class="ice-layer l1">
+            <div class="ice-label">水面上 · 意识到了但管不过来</div>
+            <div class="ice-desc">现有工具在这层努力——但效果有限</div>
+            <div class="ice-quote">「提醒、待办、闹钟、飞书日历都比较分散，没法综合调配」——彭占丽</div>
+        </div>
+        <div class="ice-layer water">水 面</div>
+        <div class="ice-layer l2">
+            <div class="ice-label">水面下 · 根本没意识到要管</div>
+            <div class="ice-desc">现有工具完全触达不到</div>
+            <div class="ice-quote">「聊天中穿插提到顺道买个什么东西，当时根本没觉得需要记」——刘伟鉴</div>
+        </div>
+        <div class="ice-layer l3">
+            <div class="ice-label">海底 · 意识到了但不想面对</div>
+            <div class="ice-desc">即使提醒了也没用——是情绪问题不是工具问题</div>
+            <div class="ice-quote">「牙科复查3月就到期了，一是工作太忙，二是要重新拾起这个事需要一点信心」——孙印婷</div>
+        </div>
+    </div>
+
+    <div class="insight accent">
+        <strong>关键洞察</strong>
+        <p>现有工具假设用户已经「意识到」且「愿意面对」，只帮你管中间那一层。真正的需求空间在水面下——那些连门都看不见的、以及那些看见了不想进去的。</p>
+    </div>
+
+    <h3>为什么现有工具都有点「鸡肋」</h3>
+    <table class="tbl">
+        <thead><tr><th>维度</th><th>一句话</th><th>代表原声</th></tr></thead>
+        <tbody>
+            <tr><td>被动</td><td>需要我先想到、先告诉它</td><td>「鸡肋，还是需要我主动去告诉它」</td></tr>
+            <tr><td>输入麻烦</td><td>交互重、散落多处、录入成本高</td><td>「备忘录全部乱写，今天写这明天写那」</td></tr>
+            <tr><td>提醒不靠谱</td><td>只响一次、响了没做就没了</td><td>「飞书提醒一遍忽略了就不会再提醒」</td></tr>
+            <tr><td>不够智能</td><td>没上下文、不能关联判断</td><td>「让它记了到时候也不提醒，再问记的什么说不知道」</td></tr>
+            <tr><td>只记不做</td><td>只提醒不执行 = 跟记事本没区别</td><td>「只提醒不执行等于记事本，没有本质区别」</td></tr>
+        </tbody>
+    </table>
+
+    <div class="insight green">
+        <strong>第一部分结论</strong>
+        <p>「帮我管事」的需求真实存在、比现有工具看到的更深、且当前供给全线不足。这里有一个大的、结构性的、未被满足的需求空间。</p>
+    </div>
+</section>
+
+<!-- Section 2 -->
+<section class="section">
+    <div class="section-label">Part 02 · 从立意看</div>
+    <h3>AI 应该让人更从容，而不是更焦虑</h3>
+
+    <p>第一部分说的是功能性的缺口。但这件事值得做，不只因为工具不好用——而是因为 AI 时代人变得更焦虑了：信息膨胀、欲望膨胀、事情永远做不完。<strong>AI 对人的正确回应，不是帮你做更多，是让你更平静。</strong></p>
+
+    <div class="quote">
+        <p>「AI时代的焦躁来自信息过载让欲望无限膨胀……人文关怀的核心是帮人抚平焦虑、回归平静」</p>
+        <p class="src">——wanqing</p>
+    </div>
+
+    <h4>五条人文主张</h4>
+    <div class="cards">
+        <div class="card rose">
+            <div class="card-title">做减法，做取舍</div>
+            <div class="card-desc">效率是基础，但更高层是帮人「舍」——梳理真正的优先级，而非无限扩张欲望</div>
+            <div class="card-footer">「舍的那个部分，很有人文感」——wanqing</div>
+        </div>
+        <div class="card amber">
+            <div class="card-title">托管焦虑</div>
+            <div class="card-desc">事情减不掉，但认知负担可以转移。「我帮你记着，你现在不用操心」</div>
+            <div class="card-footer">「暂时先不想，我帮你记着」——yueyue</div>
+        </div>
+        <div class="card blue">
+            <div class="card-title">尊重犹豫</div>
+            <div class="card-desc">提了很多次没做，可能不是忘了。理解你为什么没做，而不是催你做</div>
+            <div class="card-footer">「理解为什么没做，那就是人文感了」——梦馨</div>
+        </div>
+        <div class="card green">
+            <div class="card-title">非标准化</div>
+            <div class="card-desc">不把每个人的生活管理成同一个最优解。服务于你独特的生活方式</div>
+            <div class="card-footer">「不提供偏差，社会就死寂了」——韦青</div>
+        </div>
+        <div class="card" style="border-left: 3px solid #a78bfa; grid-column: 1 / -1;">
+            <div class="card-title">带人走向真实生活</div>
+            <div class="card-desc">AI 的终点不是让人更依赖屏幕。提醒你带妈妈体检，底层是让你和妈妈产生一次真实的连接。产品的成功标准不是「用户多待了几分钟」，是「用户因此去见了那个人」。</div>
+            <div class="card-footer">「真正的人文方向，应该是把人带回真实世界」——wanqing</div>
+        </div>
+    </div>
+
+    <h3>产品核心概念：惦记系统</h3>
+    <p style="font-size: 18px; color: var(--text); font-weight: 500; margin: 32px 0;">这不是待办工具，是一个惦记系统——它替你兜着生活里容易漏掉的事，让你不辜负在乎的人，也不辜负自己。</p>
+
+    <div class="compare-3">
+        <div class="cmp-col">
+            <h5>备忘录</h5>
+            <div class="meta">冰箱贴便签</div>
+            <div class="cmp-row"><div class="lbl">起点</div>你写，它存</div>
+            <div class="cmp-row"><div class="lbl">过程</div>静静躺着</div>
+            <div class="cmp-row"><div class="lbl">态度</div>无</div>
+            <div class="cmp-row"><div class="lbl">终点</div>你打勾</div>
+        </div>
+        <div class="cmp-col">
+            <h5>智能助手</h5>
+            <div class="meta">秘书</div>
+            <div class="cmp-row"><div class="lbl">起点</div>你说，它做</div>
+            <div class="cmp-row"><div class="lbl">过程</div>到时间就响</div>
+            <div class="cmp-row"><div class="lbl">态度</div>催你做</div>
+            <div class="cmp-row"><div class="lbl">终点</div>任务完成</div>
+        </div>
+        <div class="cmp-col">
+            <h5>惦记系统</h5>
+            <div class="meta">一直替你记着事的家人</div>
+            <div class="cmp-row"><div class="lbl">起点</div>它自己发现</div>
+            <div class="cmp-row"><div class="lbl">过程</div>理解你的状态，等合适的时机</div>
+            <div class="cmp-row"><div class="lbl">态度</div>替你记着，等你准备好</div>
+            <div class="cmp-row"><div class="lbl">终点</div>你回到真实生活——去见那个人</div>
+        </div>
+    </div>
+
+    <h4>最能体现这个概念的一个画面</h4>
+    <div class="timeline-compare">
+        <div class="tc-header">
+            <div></div>
+            <div>没有惦记</div>
+            <div>有惦记</div>
+        </div>
+        <div class="tc-row"><div>答应时</div><div>答应妈妈带她去体检</div><div>答应妈妈带她去体检</div></div>
+        <div class="tc-row"><div>第1周</div><div>忙，忘了</div><div>系统记住了</div></div>
+        <div class="tc-row"><div>第2-3周</div><div>完全想不起来</div><div>理解你在忙，不催</div></div>
+        <div class="tc-row"><div>周末有空</div><div>—</div><div>「妈妈的体检还没去呢」</div></div>
+        <div class="tc-row result"><div>结果</div><div>三个月后想起来，愧疚</div><div>你去了。不辜负。</div></div>
+    </div>
+    <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 16px;">这不是管理。这是惦记。</p>
+
+    <h3>核心场景：四个「不辜负」</h3>
+    <div class="cards">
+        <div class="card rose">
+            <div class="card-title">不辜负家人的期待</div>
+            <div class="card-desc">妈妈体检 / 女儿车贴 / 爷爷手机 / 给妈妈买东西</div>
+            <div class="card-footer">如果漏了：愧疚、失信于最亲的人</div>
+        </div>
+        <div class="card amber">
+            <div class="card-title">不错过时间窗口</div>
+            <div class="card-desc">抢票 / 证件到期 / 缴费 / 会员日</div>
+            <div class="card-footer">如果漏了：错过不可逆，补救成本极高</div>
+        </div>
+        <div class="card blue">
+            <div class="card-title">不漏掉答应别人的事</div>
+            <div class="card-desc">朋友约定 / 工作承诺 / 帮人带东西</div>
+            <div class="card-footer">如果漏了：别人觉得你不靠谱</div>
+        </div>
+        <div class="card green">
+            <div class="card-title">不放弃自己想做的事</div>
+            <div class="card-desc">健身 / 学习 / 旅行计划 / 长期目标</div>
+            <div class="card-footer">如果漏了：对自己失望，觉得又没坚持住</div>
+        </div>
+    </div>
+    <p style="text-align: center; font-size: 14px; color: var(--text-dim);">四个「不辜负」，对应四种关系：<strong>家人、时间、他人、自己。</strong></p>
+
+    <h4 style="margin-top: 48px;">与 OPPO 一键闪记的区别</h4>
+    <table class="tbl">
+        <thead><tr><th></th><th>OPPO 一键闪记</th><th>盯事儿</th></tr></thead>
+        <tbody>
+            <tr><td>核心逻辑</td><td>「记」——按一下，帮你存好</td><td>「惦记」——不用按，自己发现</td></tr>
+            <tr><td>解决的问题</td><td>输入门槛（记的过程麻烦）</td><td>意识门槛（你根本没想到要记）</td></tr>
+            <tr><td>冰山位置</td><td>水面上</td><td>水面下 + 海底</td></tr>
+            <tr><td>场景叙事</td><td>功能：我帮你记住了什么</td><td>关系：你因此没有辜负谁</td></tr>
+            <tr><td>用户动作</td><td>主动按一下</td><td>不需要任何动作</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- Section 3 -->
+<section class="section">
+    <div class="section-label">Part 03 · 从时机看</div>
+    <h3>这恰好是用户对 AIOS 的第一想象</h3>
+
+    <p>N=293 用户对 AIOS 的自由联想，高频词和具象场景与盯事儿高度重合。用户不需要被教育——他们已经在想象这个产品了。</p>
+
+    <div class="data-row">
+        <div class="data-num"><div class="val">93</div><div class="label">次「自动」</div></div>
+        <div class="data-num"><div class="val">85</div><div class="label">次「主动」</div></div>
+        <div class="data-num"><div class="val">53</div><div class="label">次「一句话」</div></div>
+        <div class="data-num"><div class="val">51</div><div class="label">次「贾维斯」</div></div>
+    </div>
+
+    <p>这些词指向的不是「更强的搜索」「更快的生成」，而是<strong>「帮我管事的人」</strong>。</p>
+
+    <h4>用户描述 AIOS 时，就是在描述盯事儿</h4>
+    <p>Q6+Q7 中，<strong>25%（73/293）</strong>的用户本质上在说「帮我管事/记事/盯事」：</p>
+    <div class="quote">
+        <p>「手动打开钉钉看会议待办，抄到备忘录、标优先级，看微信群聊、看需要做的事……现在只需要让AI来操作，我就不用动」</p>
+    </div>
+    <div class="quote">
+        <p>「不只是前一天提醒的，前几周记录过但没完成的，它也会一直记得住，一直催着我完成」</p>
+    </div>
+    <p style="font-size: 12px; color: var(--text-muted);">注：AIOS 数据证明方向对（用户想要主动式管家），具体场景验证来自盯事儿 30 人访谈。</p>
+</section>
+
+<!-- Divider -->
+<div class="divider">
+    <h3>至此：值得做。</h3>
+    <p>需求真实 × 立意成立 × 时机正确<br>→ 接下来回答：放在哪里？怎么做？</p>
+</div>
+
+<!-- Section 4 -->
+<section class="section">
+    <div class="section-label">Part 04 · 负一屏</div>
+    <h3>负一屏当前的价值几何</h3>
+
+    <p>负一屏占据「主屏左滑」的黄金地段。问题不是有没有问题，而是：<strong>这块地段当前产出的价值，配不配得上它的位置？</strong></p>
+
+    <div class="insight amber">
+        <strong>初步判断</strong>
+        <p>负一屏是主屏左滑的黄金地段，但当前内容区的产出价值远低于位置本身的潜力——不是「有问题」，是「没发挥出应有的价值」。有改造空间。</p>
+    </div>
+
+    <h4>它适合承载盯事儿吗？</h4>
+    <table class="tbl">
+        <thead><tr><th>产品需要</th><th>负一屏</th><th>锁屏侧滑</th></tr></thead>
+        <tbody>
+            <tr><td>独立、有专属感</td><td style="color: var(--green);">✓ 整屏空间</td><td>空间较小</td></tr>
+            <tr><td>高频可见</td><td>取决于习惯养成</td><td style="color: var(--green);">✓ 每次亮屏可见</td></tr>
+            <tr><td>主动去看，不被打扰</td><td style="color: var(--green);">✓ 用户主动划入</td><td style="color: var(--green);">✓ 用户主动看</td></tr>
+            <tr><td>零历史包袱</td><td>扫一扫/付款码要保留</td><td style="color: var(--green);">✓ 无</td></tr>
+        </tbody>
+    </table>
+
+    <div class="quote">
+        <p>「步骤最短，滑过去直接能看到，很多时候知道了就行」</p>
+        <p class="src">——李堃</p>
+    </div>
+
+    <div class="insight green">
+        <strong>结论</strong>
+        <p>负一屏内容区适合承载盯事儿（保留快捷功能不动），锁屏侧滑做高频补充入口。两者内容一致。</p>
+    </div>
+</section>
+
+</div>
+</body>
+</html>
